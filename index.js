@@ -11,7 +11,7 @@ app.use(express.json());
 
 const isProduction = process.env.NODE_ENV === 'production'
 const origin = {
-  origin: isProduction ? 'https://bug-tracker-backend-jy.herokuapp.com/' : '*',
+  origin: isProduction ? 'http://localhost:3000/' : '*',
 }
 app.use(cors(origin));
 
