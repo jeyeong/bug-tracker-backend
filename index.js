@@ -19,19 +19,23 @@ app.use(cors(origin));
 
 // API endpoints
 const getData = (req, res) => {
-  pool.query('SELECT * FROM bugs', (error, results) => {
+  const id = req.query.id;
+
+  pool.query(`SELECT * FROM users WHERE user_id = '${id}'`, (error, results) => {
     if (error) {
-      throw error
+      throw error;
     }
-    res.status(200).json(results.rows)
+    res.status(200).json(results.rows);
   });
 }
 
 app.get('/', (req, res) => res.status(200).send('Hello'));
 
-app
-  .route('/data')
-  .get(getData);
+app.get('/data', getData);
+
+// app
+//   .route('/data')
+//   .get(getData);
 
 // Listener
 app.listen(port, () => console.log(`Listening. Port: ${port}`));
