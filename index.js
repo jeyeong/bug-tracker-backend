@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const { pool } = require('./config');
+const helmet = require('helmet');
+const compression = require('compression');
 
 // App config
 const app = express();
@@ -8,34 +9,20 @@ const port = process.env.PORT || 8001;
 
 // Middlewares
 app.use(express.json());
+app.use(helmet());
+app.use(compression());
 
-const isProduction = process.env.NODE_ENV === 'production'
-const origin = {
-  origin: isProduction ? '*' : '*',
-}
+const isProduction = process.env.NODE_ENV === 'production';
+const origin = { origin: isProduction ? '*' : '*' };
 app.use(cors(origin));
 
-// DB config
-
 // API endpoints
-const getData = (req, res) => {
-  const id = req.query.id;
+const usersRouter = require('./controllers/users');
 
-  pool.query(`SELECT * FROM users WHERE user_id = '${id}'`, (error, results) => {
-    if (error) {
-      throw error;
-    }
-    res.status(200).json(results.rows);
-  });
-}
-
-app.get('/', (req, res) => res.status(200).send('Hello'));
-
-app.get('/data', getData);
-
-// app
-//   .route('/data')
-//   .get(getData);
+app.get('/', (req, res) => {
+  res.status(200).send('Bug Tracker Backend API')
+});
+app.use('/users', usersRouter);
 
 // Listener
 app.listen(port, () => console.log(`Listening. Port: ${port}`));
