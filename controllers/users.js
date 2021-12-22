@@ -13,6 +13,18 @@ usersRouter.get('/', (req, res) => {
   );
 });
 
+usersRouter.get('/unassigned', (req, res) => {
+  pool.query(
+    'SELECT * FROM unassigned_users ORDER BY user_id',
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+});
+
 usersRouter.get('/:id', (req, res) => {
   const id = req.params.id;
 
@@ -24,19 +36,6 @@ usersRouter.get('/:id', (req, res) => {
         throw error;
       }
       res.status(200).json(results.rows[0]);
-    }
-  );
-});
-
-usersRouter.get('/test', (req, res) => {
-  console.log('req');
-  pool.query(
-    'SELECT * FROM unassigned_users ORDER BY user_id',
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res.status(200).json(results.rows);
     }
   );
 });
