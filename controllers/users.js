@@ -28,6 +28,19 @@ usersRouter.get('/:id', (req, res) => {
   );
 });
 
+usersRouter.get('/test', (req, res) => {
+  console.log('req');
+  pool.query(
+    'SELECT * FROM unassigned_users ORDER BY user_id',
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+});
+
 usersRouter.put('/', (req, res) => {
   const { user_id, role } = req.body;
 
@@ -46,18 +59,6 @@ usersRouter.put('/', (req, res) => {
       res.status(200).send(`User modified with ID: ${user_id}`);
     }
   )
-});
-
-usersRouter.get('/unassigned', (req, res) => {
-  pool.query(
-    'SELECT * FROM unassigned_users ORDER BY user_id',
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res.status(200).json(results.rows);
-    }
-  );
 });
 
 module.exports = usersRouter;

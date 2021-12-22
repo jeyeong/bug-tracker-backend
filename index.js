@@ -18,11 +18,13 @@ app.use(cors(origin));
 
 // API endpoints
 const usersRouter = require('./controllers/users');
+const unassignedRouter = require('./controllers/unassignedUsers');
 
 app.get('/', (req, res) => {
   res.status(200).send('Bug Tracker Backend API')
 });
 app.use('/users', usersRouter);
+app.use('/unassigned', unassignedRouter);
 
 // Listener
 app.listen(port, () => console.log(`Listening. Port: ${port}`));
