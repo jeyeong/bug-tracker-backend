@@ -3,7 +3,7 @@ const { pool } = require('../config/config');
 
 usersRouter.get('/', (req, res) => {
   pool.query(
-    'SELECT * FROM users ORDER BY user_id',
+    "SELECT * FROM users WHERE role <> '' ORDER BY user_id",
     (error, results) => {
       if (error) {
         throw error;
@@ -15,7 +15,7 @@ usersRouter.get('/', (req, res) => {
 
 usersRouter.get('/unassigned', (req, res) => {
   pool.query(
-    'SELECT * FROM unassigned_users ORDER BY user_id',
+    "SELECT * FROM users WHERE role = '' ORDER BY user_id",
     (error, results) => {
       if (error) {
         throw error;
