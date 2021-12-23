@@ -32,7 +32,7 @@ usersRouter.put('/reset', (req, res) => {
       if (error) {
         throw error;
       }
-      res.status(200).json('Demo unassigned users reset.');
+      res.status(200).json('(Demo) Unassigned users reset.');
     }
   );
 });
