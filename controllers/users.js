@@ -25,6 +25,18 @@ usersRouter.get('/unassigned', (req, res) => {
   );
 });
 
+usersRouter.put('/reset', (req, res) => {
+  pool.query(
+    "UPDATE users SET role = '' WHERE user_id = '10100' OR user_id = '10101' OR user_id = '10102'",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json('Users with ID 10100, 10101, and 10102 reset.');
+    }
+  );
+});
+
 usersRouter.get('/:id', (req, res) => {
   const id = req.params.id;
 
@@ -44,7 +56,7 @@ usersRouter.put('/', (req, res) => {
   const { user_id, role } = req.body;
 
   if (role === 'Admin') {
-    res.status(400).json({error: 'Cannot set admin'});
+    res.status(400).json({error: 'Cannot set admin.'});
     return;
   }
 
