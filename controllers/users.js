@@ -25,10 +25,25 @@ usersRouter.get('/unassigned', (req, res) => {
   );
 });
 
-usersRouter.put('/reset', (req, res) => {
-  pool.query(
-    "UPDATE users SET role = '' WHERE user_id = '10100' OR user_id = '10101' OR user_id = '10102'",
-    (error, results) => {
+usersRouter.put('/reset', async (req, res) => {
+  const queryString = `
+    UPDATE users AS u SET
+      role = u_new.role
+    FROM (values
+      ('10000', 'Project Manager'),
+      ('10001', 'Project Manager'),
+      ('10002', 'Developer'),
+      ('10003', 'Developer'),
+      ('10004', 'Submitter'),
+      ('10005', 'Submitter'),
+      ('10100', ''),
+      ('10101', ''),
+      ('10102', '')
+    ) AS u_new(user_id, role)
+    WHERE u.user_id = u_new.user_id
+  `
+
+  pool.query(queryString, (error, results) => {
       if (error) {
         throw error;
       }
