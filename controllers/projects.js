@@ -2,8 +2,19 @@ const projectRouter = require('express').Router();
 const { pool } = require('../config/config');
 
 projectRouter.get('/', (req, res) => {
+  const queryString = `
+    SELECT
+      project_id, name, description, first_name, last_name
+    FROM
+      projects
+    JOIN users ON
+      projects.manager_id = users.user_id
+    ORDER BY
+      project_id
+  `
+
   pool.query(
-    "SELECT * FROM projects ORDER BY project_id",
+    queryString,
     (error, results) => {
       if (error) {
         throw error;
