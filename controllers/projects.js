@@ -13,9 +13,7 @@ projectRouter.get('/', (req, res) => {
       project_id
   `
 
-  pool.query(
-    queryString,
-    (error, results) => {
+  pool.query(queryString, (error, results) => {
       if (error) {
         throw error;
       }
@@ -23,5 +21,20 @@ projectRouter.get('/', (req, res) => {
     }
   );
 });
+
+projectRouter.post('/', (req, res) => {
+  const { name, description } = req.body;
+
+  pool.query(
+    'INSERT INTO projects (name, description) VALUES ($1, $2)',
+    [name, description],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Project created.`);
+    }
+  )
+})
 
 module.exports = projectRouter;

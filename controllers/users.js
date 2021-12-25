@@ -25,7 +25,7 @@ usersRouter.get('/unassigned', (req, res) => {
   );
 });
 
-usersRouter.put('/reset', async (req, res) => {
+usersRouter.put('/reset', (req, res) => {
   const queryString = `
     UPDATE users AS u SET
       role = u_new.role
