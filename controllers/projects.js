@@ -37,4 +37,19 @@ projectRouter.post('/', (req, res) => {
   )
 })
 
+projectRouter.get('/:id', (req, res) => {
+  const id = req.params.id;
+
+  pool.query(
+    'SELECT * FROM projects WHERE project_id = $1',
+    [id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows[0]);
+    }
+  )
+})
+
 module.exports = projectRouter;
