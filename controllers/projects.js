@@ -7,7 +7,7 @@ projectRouter.get('/', (req, res) => {
       project_id, name, description, first_name, last_name
     FROM
       projects
-    JOIN users ON
+    LEFT JOIN users ON
       projects.manager_id = users.user_id
     ORDER BY
       project_id
