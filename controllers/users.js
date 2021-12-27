@@ -47,7 +47,7 @@ usersRouter.put('/reset', (req, res) => {
       if (error) {
         throw error;
       }
-      res.status(200).json('Reset to demo default.');
+      res.status(200).json('Restored to demo default.');
     }
   );
 });
