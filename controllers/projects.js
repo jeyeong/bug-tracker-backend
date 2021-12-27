@@ -47,8 +47,23 @@ projectRouter.get('/:id', (req, res) => {
       if (error) {
         throw error;
       }
-      console.log(results);
-      res.status(200).json(results?.rows[0]);
+      res.status(200).json(results.rows[0]);
+    }
+  )
+})
+
+projectRouter.put('/change-name/:id', (req, res) => {
+  const id = req.params.id;
+  const { name } = req.body;
+
+  pool.query(
+    'UPDATE projects SET name = $1 WHERE project_id = $2',
+    [name, id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Project with ID ${id} updated.`);
     }
   )
 })
