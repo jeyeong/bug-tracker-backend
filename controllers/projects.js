@@ -84,7 +84,7 @@ projectRouter.put('/change-desc/:id', (req, res) => {
   )
 })
 
-projectRouter.get('/team/:id', (req, res) => {
+projectRouter.get('/:id/team', (req, res) => {
   const id = req.params.id;
 
   const queryString = `
