@@ -84,4 +84,26 @@ projectRouter.put('/change-desc/:id', (req, res) => {
   )
 })
 
+projectRouter.get('/team/:id', (req, res) => {
+  const id = req.params.id;
+
+  const queryString = `
+    SELECT * FROM
+      users
+    WHERE user_id IN (
+      SELECT user_id FROM
+        user_projects
+      WHERE project_id = $1
+    )
+  `
+
+  pool.query(queryString, [id], (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  )
+})
+
 module.exports = projectRouter;
