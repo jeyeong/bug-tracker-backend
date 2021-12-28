@@ -107,4 +107,20 @@ projectRouter.get('/:id/team', (req, res) => {
   )
 })
 
+projectRouter.delete('/:pid/team/:uid', (req, res) => {
+  const project_id = req.params.pid;
+  const user_id = req.params.uid;
+
+  pool.query(
+    'DELETE FROM user_projects WHERE project_id = $1 AND user_id = $2',
+    [project_id, user_id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Deleted user ${user_id} from project ${project_id}.`);
+    }
+  )
+})
+
 module.exports = projectRouter;

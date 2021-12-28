@@ -70,8 +70,20 @@ usersRouter.get('/:id', (req, res) => {
 usersRouter.put('/', (req, res) => {
   const { user_id, role } = req.body;
 
+  const forbidden = [
+    '2222',
+    '3333',
+    '4444',
+    '5555',
+  ]
+
+  if (forbidden.find(id => id === user_id)) {
+    res.status(400).json({errorMsg: 'Cannot modify demo users.'});
+    return;
+  }
+
   if (role === 'Admin') {
-    res.status(400).json({error: 'Cannot set admin.'});
+    res.status(400).json({errorMsg: 'Cannot set admin.'});
     return;
   }
 
