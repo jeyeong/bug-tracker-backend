@@ -95,6 +95,7 @@ projectRouter.get('/:id/team', (req, res) => {
         user_projects
       WHERE project_id = $1
     )
+    ORDER BY user_id
   `
 
   pool.query(queryString, [id], (error, results) => {
