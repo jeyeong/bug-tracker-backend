@@ -55,6 +55,27 @@ projectRouter.get('/:id', (req, res) => {
   )
 })
 
+// Delete a project
+projectRouter.delete('/:id', (req, res) => {
+  const id = req.params.id;
+
+  if (id === '1' || id === '2') {
+    res.status(400).json({errorMsg: 'Cannot delete demo projects.'});
+    return;
+  }
+
+  pool.query(
+    'DELETE FROM projects WHERE project_id = $1',
+    [id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Deleted project ${id}.`);
+    }
+  )
+})
+
 // Change the name of a project
 projectRouter.put('/change-name/:id', (req, res) => {
   const id = req.params.id;
