@@ -152,6 +152,23 @@ projectRouter.delete('/:pid/team/:uid', (req, res) => {
   )
 })
 
+// Update the manager of a project
+projectRouter.put('/:pid/manager/:uid', (req, res) => {
+  const project_id = req.params.pid;
+  const user_id = req.params.uid;
+
+  pool.query(
+    'UPDATE projects SET manager_id = $1 WHERE project_id = $2',
+    [user_id, project_id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Manager of project ${project_id} changed to user ${user_id}.`);
+    }
+  )
+})
+
 // Reset project 1: Bug Tracker Application
 projectRouter.put('/reset/1', async (req, res) => {
   const name = 'Bug Tracker Application';
