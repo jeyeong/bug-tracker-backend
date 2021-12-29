@@ -1,6 +1,7 @@
 const projectRouter = require('express').Router();
 const { pool } = require('../config/config');
 
+// Get all projects and their managers
 projectRouter.get('/', (req, res) => {
   const queryString = `
     SELECT
@@ -22,6 +23,7 @@ projectRouter.get('/', (req, res) => {
   );
 });
 
+// Create a new project
 projectRouter.post('/', (req, res) => {
   const { name, description } = req.body;
 
@@ -37,6 +39,7 @@ projectRouter.post('/', (req, res) => {
   )
 })
 
+// Get a specific project
 projectRouter.get('/:id', (req, res) => {
   const id = req.params.id;
 
@@ -52,6 +55,7 @@ projectRouter.get('/:id', (req, res) => {
   )
 })
 
+// Change the name of a project
 projectRouter.put('/change-name/:id', (req, res) => {
   const id = req.params.id;
   const { name } = req.body;
@@ -68,6 +72,7 @@ projectRouter.put('/change-name/:id', (req, res) => {
   )
 })
 
+// Change the description of a project
 projectRouter.put('/change-desc/:id', (req, res) => {
   const id = req.params.id;
   const { description } = req.body;
@@ -84,6 +89,7 @@ projectRouter.put('/change-desc/:id', (req, res) => {
   )
 })
 
+// Get the team members of a project
 projectRouter.get('/:id/team', (req, res) => {
   const id = req.params.id;
 
@@ -107,6 +113,7 @@ projectRouter.get('/:id/team', (req, res) => {
   )
 })
 
+// Add a user to the project
 projectRouter.post('/:pid/team/:uid', (req, res) => {
   const project_id = req.params.pid;
   const user_id = req.params.uid;
@@ -123,9 +130,15 @@ projectRouter.post('/:pid/team/:uid', (req, res) => {
   )
 })
 
+// Delete a user from the project
 projectRouter.delete('/:pid/team/:uid', (req, res) => {
   const project_id = req.params.pid;
   const user_id = req.params.uid;
+
+  if (project_id === '1' && user_id === '117085400102997502759') {
+    res.status(400).json({errorMsg: 'Forbidden delete.'});
+    return;
+  }
 
   pool.query(
     'DELETE FROM user_projects WHERE user_id = $1 AND project_id = $2',
@@ -137,6 +150,29 @@ projectRouter.delete('/:pid/team/:uid', (req, res) => {
       res.status(200).send(`Deleted user ${user_id} from project ${project_id}.`);
     }
   )
+})
+
+// Reset project 1: Bug Tracker Application
+projectRouter.put('/reset/1', async (req, res) => {
+  const name = 'Bug Tracker Application';
+  const desc = 'A full-stack Bug Tracker build, created with ReactJS, Express, and PostgreSQL.';
+  const teamConstructor = `
+    INSERT INTO
+      user_projects
+    VALUES
+      ('117085400102997502759', 1),
+      ('2222', 1),
+      ('3333', 1),
+      ('4444', 1),
+      ('5555', 1)
+  `
+  
+  pool.query('UPDATE projects SET name = $1 WHERE project_id = 1', [name]);
+  pool.query('UPDATE projects SET description = $1 WHERE project_id = 1', [desc]);
+  await pool.query('DELETE FROM user_projects WHERE project_id = 1');
+  pool.query(teamConstructor);
+
+  res.status(200).send('Project 1 reset.');
 })
 
 module.exports = projectRouter;

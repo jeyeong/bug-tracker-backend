@@ -1,6 +1,7 @@
 const usersRouter = require('express').Router();
 const { pool } = require('../config/config');
 
+// Get all assigned users
 usersRouter.get('/', (req, res) => {
   pool.query(
     "SELECT * FROM users WHERE role <> '' ORDER BY user_id",
@@ -13,6 +14,7 @@ usersRouter.get('/', (req, res) => {
   );
 });
 
+// Get all unassigned users
 usersRouter.get('/unassigned', (req, res) => {
   pool.query(
     "SELECT * FROM users WHERE role = '' ORDER BY user_id",
@@ -25,6 +27,7 @@ usersRouter.get('/unassigned', (req, res) => {
   );
 });
 
+// Reset user assignments to demo default
 usersRouter.put('/reset', (req, res) => {
   const queryString = `
     UPDATE users AS u SET
@@ -52,6 +55,7 @@ usersRouter.put('/reset', (req, res) => {
   );
 });
 
+// Get specific user
 usersRouter.get('/:id', (req, res) => {
   const id = req.params.id;
 
@@ -67,6 +71,7 @@ usersRouter.get('/:id', (req, res) => {
   );
 });
 
+// Modify the role of a user
 usersRouter.put('/', (req, res) => {
   const { user_id, role } = req.body;
 
