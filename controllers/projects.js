@@ -173,6 +173,7 @@ projectRouter.put('/:pid/manager/:uid', (req, res) => {
 projectRouter.put('/reset/1', async (req, res) => {
   const name = 'Bug Tracker Application';
   const desc = 'A full-stack Bug Tracker build, created with ReactJS, Express, and PostgreSQL.';
+  const manager_id = '117085400102997502759';
   const teamConstructor = `
     INSERT INTO
       user_projects
@@ -184,8 +185,10 @@ projectRouter.put('/reset/1', async (req, res) => {
       ('5555', 1)
   `
   
-  pool.query('UPDATE projects SET name = $1 WHERE project_id = 1', [name]);
-  pool.query('UPDATE projects SET description = $1 WHERE project_id = 1', [desc]);
+  pool.query(
+    'UPDATE projects SET name = $1, description = $2, manager_id = $3 WHERE project_id = 1',
+    [name, desc, manager_id]
+  );
   await pool.query('DELETE FROM user_projects WHERE project_id = 1');
   pool.query(teamConstructor);
 
@@ -196,6 +199,7 @@ projectRouter.put('/reset/1', async (req, res) => {
 projectRouter.put('/reset/2', async (req, res) => {
   const name = 'Chemistry Experiments';
   const desc = 'A series of chemical trials, aimed at producing substances of high purity.';
+  const manager_id = '10000';
   const teamConstructor = `
     INSERT INTO
       user_projects
@@ -208,8 +212,10 @@ projectRouter.put('/reset/2', async (req, res) => {
       ('10005', 2)
   `
   
-  pool.query('UPDATE projects SET name = $1 WHERE project_id = 2', [name]);
-  pool.query('UPDATE projects SET description = $1 WHERE project_id = 2', [desc]);
+  pool.query(
+    'UPDATE projects SET name = $1, description = $2, manager_id = $3 WHERE project_id = 1',
+    [name, desc, manager_id]
+  );
   await pool.query('DELETE FROM user_projects WHERE project_id = 2');
   pool.query(teamConstructor);
 
