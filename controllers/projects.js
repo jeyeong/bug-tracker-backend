@@ -107,13 +107,29 @@ projectRouter.get('/:id/team', (req, res) => {
   )
 })
 
+projectRouter.post('/:pid/team/:uid', (req, res) => {
+  const project_id = req.params.pid;
+  const user_id = req.params.uid;
+
+  pool.query(
+    'INSERT INTO user_projects VALUES ($1, $2)',
+    [user_id, project_id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Added user ${user_id} to project ${project_id}.`);
+    }
+  )
+})
+
 projectRouter.delete('/:pid/team/:uid', (req, res) => {
   const project_id = req.params.pid;
   const user_id = req.params.uid;
 
   pool.query(
-    'DELETE FROM user_projects WHERE project_id = $1 AND user_id = $2',
-    [project_id, user_id],
+    'DELETE FROM user_projects WHERE user_id = $1 AND project_id = $2',
+    [user_id, project_id],
     (error, results) => {
       if (error) {
         throw error;
