@@ -175,4 +175,28 @@ projectRouter.put('/reset/1', async (req, res) => {
   res.status(200).send('Project 1 reset.');
 })
 
+// Reset project 2: Chemistry Experiments
+projectRouter.put('/reset/2', async (req, res) => {
+  const name = 'Chemistry Experiments';
+  const desc = 'A series of chemical trials, aimed at producing substances of high purity.';
+  const teamConstructor = `
+    INSERT INTO
+      user_projects
+    VALUES
+      ('10000', 2),
+      ('10001', 2),
+      ('10002', 2),
+      ('10003', 2),
+      ('10004', 2),
+      ('10005', 2)
+  `
+  
+  pool.query('UPDATE projects SET name = $1 WHERE project_id = 2', [name]);
+  pool.query('UPDATE projects SET description = $1 WHERE project_id = 2', [desc]);
+  await pool.query('DELETE FROM user_projects WHERE project_id = 2');
+  pool.query(teamConstructor);
+
+  res.status(200).send('Project 2 reset.');
+})
+
 module.exports = projectRouter;
