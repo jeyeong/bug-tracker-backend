@@ -23,6 +23,31 @@ projectRouter.get('/', (req, res) => {
   );
 });
 
+// Get projects belonging to a certain user
+projectRouter.get('/user/:id', (req, res) => {
+  const id = req.params.id;
+
+  const queryString = `
+    SELECT * FROM
+      projects
+    WHERE
+      project_id
+    IN (
+      SELECT project_id FROM
+        user_projects
+      WHERE user_id = $1
+    )
+  `
+
+  pool.query(queryString, [id], (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+});
+
 // Create a new project
 projectRouter.post('/', (req, res) => {
   const { name, description } = req.body;
