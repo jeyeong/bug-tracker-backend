@@ -14,6 +14,16 @@ app.use(helmet());
 app.use(compression());
 app.use(cors({ origin: isProduction ? '*' : '*' }));
 
+// Add Access Control Allow Origin headers
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+})
+
 // API endpoints
 const usersRouter = require('./controllers/users');
 const projectsRouter = require('./controllers/projects');
