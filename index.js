@@ -23,7 +23,7 @@ app.use(cors({ origin: isProduction ? '*' : '*' }));
 //   );
 //   next();
 // })
-
+ 
 // API endpoints
 const usersRouter = require('./controllers/users');
 const projectsRouter = require('./controllers/projects');
