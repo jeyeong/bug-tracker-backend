@@ -1,6 +1,11 @@
 const ticketsRouter = require('express').Router();
 const { pool } = require('../config/config');
 
+//
+ticketsRouter.get('/', (req, res) => {
+  res.status(200).send('working!');
+})
+
 // Create a new ticket
 ticketsRouter.post('/', (req, res) => {
   const {
