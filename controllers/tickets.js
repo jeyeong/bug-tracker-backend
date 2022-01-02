@@ -17,6 +17,40 @@ ticketsRouter.get('/:id', (req, res) => {
   );
 })
 
+// Summarize tickets of projects assigned to a user
+ticketsRouter.get('/summary/:userid', (req, res) => {
+  const id = req.params.userid;
+
+  const queryString = `
+    SELECT
+      count(priority), project_id, priority
+    FROM
+      tickets
+    WHERE
+      project_id
+    IN (
+      SELECT project_id FROM
+        projects
+      WHERE
+        project_id
+      IN (
+        SELECT project_id FROM
+          user_projects
+        WHERE user_id = $1
+      )
+    )
+    GROUP BY project_id, priority
+  `
+
+  pool.query(queryString, [id], (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+})
+
 // Create a new ticket
 ticketsRouter.post('/', (req, res) => {
   const {
@@ -39,7 +73,7 @@ ticketsRouter.post('/', (req, res) => {
       }
       res.status(200).json(results.rows[0]);
     }
-  )
+  );
 })
 
 module.exports = ticketsRouter;
