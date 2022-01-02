@@ -16,13 +16,15 @@ app.use(cors({ origin: isProduction ? '*' : '*' }));
 
 // API endpoints
 const usersRouter = require('./controllers/users');
-const projectRouter = require('./controllers/projects');
+const projectsRouter = require('./controllers/projects');
+const ticketsRouter = require('./controllers/tickets');
 
 app.get('/', (req, res) => {
   res.status(200).send('Bug Tracker Backend API')
 });
 app.use('/users', usersRouter);
-app.use('/projects', projectRouter);
+app.use('/projects', projectsRouter);
+app.use('/tickets', ticketsRouter);
 
 // Listener
 app.listen(port, () => console.log(`Listening. Port: ${port}`));
