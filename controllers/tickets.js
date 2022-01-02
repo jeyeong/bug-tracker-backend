@@ -1,6 +1,22 @@
 const ticketsRouter = require('express').Router();
 const { pool } = require('../config/config');
 
+// Get tickets of a specific project
+ticketsRouter.get('/:id', (req, res) => {
+  const id = req.params.id;
+
+  pool.query(
+    'SELECT * FROM tickets WHERE project_id = $1',
+    [id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+})
+
 // Create a new ticket
 ticketsRouter.post('/', (req, res) => {
   const {
