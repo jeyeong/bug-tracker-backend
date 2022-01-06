@@ -17,6 +17,32 @@ ticketsRouter.get('/:id', (req, res) => {
   );
 })
 
+// Get tickets belonging to a certain user
+ticketsRouter.get('/user/:id', (req, res) => {
+  const id = req.params.id;
+
+  const queryString = `
+    SELECT * FROM
+      tickets
+    WHERE
+      project_id
+    IN (
+      SELECT project_id FROM
+        user_projects
+      WHERE
+        user_id = $1
+    )
+  `
+
+  pool.query(queryString, [id], (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+})
+
 // Summarize tickets of projects assigned to a user
 ticketsRouter.get('/summary/:userid', (req, res) => {
   const id = req.params.userid;
