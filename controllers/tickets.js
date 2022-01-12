@@ -6,7 +6,7 @@ ticketsRouter.get('/:id', (req, res) => {
   const id = req.params.id;
 
   pool.query(
-    'SELECT * FROM tickets WHERE project_id = $1',
+    'SELECT * FROM tickets WHERE ticket_id = $1',
     [id],
     (error, results) => {
       if (error) {
