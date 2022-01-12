@@ -1,8 +1,8 @@
-const projectRouter = require('express').Router();
+const projectsRouter = require('express').Router();
 const { pool } = require('../config/config');
 
 // Get all projects and their managers
-projectRouter.get('/', (req, res) => {
+projectsRouter.get('/', (req, res) => {
   const queryString = `
     SELECT
       project_id, name, description, first_name, last_name
@@ -24,7 +24,7 @@ projectRouter.get('/', (req, res) => {
 });
 
 // Get projects belonging to a certain user
-projectRouter.get('/user/:id', (req, res) => {
+projectsRouter.get('/user/:id', (req, res) => {
   const id = req.params.id;
 
   const queryString = `
@@ -49,7 +49,7 @@ projectRouter.get('/user/:id', (req, res) => {
 });
 
 // Create a new project
-projectRouter.post('/', (req, res) => {
+projectsRouter.post('/', (req, res) => {
   const { name, description } = req.body;
 
   pool.query(
@@ -65,7 +65,7 @@ projectRouter.post('/', (req, res) => {
 })
 
 // Get a specific project
-projectRouter.get('/:id', (req, res) => {
+projectsRouter.get('/:id', (req, res) => {
   const id = req.params.id;
 
   pool.query(
@@ -81,7 +81,7 @@ projectRouter.get('/:id', (req, res) => {
 })
 
 // Delete a project
-projectRouter.delete('/:id', (req, res) => {
+projectsRouter.delete('/:id', (req, res) => {
   const id = req.params.id;
 
   if (id === '1' || id === '2') {
@@ -102,7 +102,7 @@ projectRouter.delete('/:id', (req, res) => {
 })
 
 // Change the name of a project
-projectRouter.put('/change-name/:id', (req, res) => {
+projectsRouter.put('/change-name/:id', (req, res) => {
   const id = req.params.id;
   const { name } = req.body;
 
@@ -119,7 +119,7 @@ projectRouter.put('/change-name/:id', (req, res) => {
 })
 
 // Change the description of a project
-projectRouter.put('/change-desc/:id', (req, res) => {
+projectsRouter.put('/change-desc/:id', (req, res) => {
   const id = req.params.id;
   const { description } = req.body;
 
@@ -136,7 +136,7 @@ projectRouter.put('/change-desc/:id', (req, res) => {
 })
 
 // Get the team members of a project
-projectRouter.get('/:id/team', (req, res) => {
+projectsRouter.get('/:id/team', (req, res) => {
   const id = req.params.id;
 
   const queryString = `
@@ -160,7 +160,7 @@ projectRouter.get('/:id/team', (req, res) => {
 })
 
 // Add a user to the project
-projectRouter.post('/:pid/team/:uid', (req, res) => {
+projectsRouter.post('/:pid/team/:uid', (req, res) => {
   const project_id = req.params.pid;
   const user_id = req.params.uid;
 
@@ -177,7 +177,7 @@ projectRouter.post('/:pid/team/:uid', (req, res) => {
 })
 
 // Delete a user from the project
-projectRouter.delete('/:pid/team/:uid', (req, res) => {
+projectsRouter.delete('/:pid/team/:uid', (req, res) => {
   const project_id = req.params.pid;
   const user_id = req.params.uid;
 
@@ -199,7 +199,7 @@ projectRouter.delete('/:pid/team/:uid', (req, res) => {
 })
 
 // Update the manager of a project
-projectRouter.put('/:pid/manager/:uid', (req, res) => {
+projectsRouter.put('/:pid/manager/:uid', (req, res) => {
   const project_id = req.params.pid;
   const user_id = req.params.uid;
 
@@ -216,7 +216,7 @@ projectRouter.put('/:pid/manager/:uid', (req, res) => {
 })
 
 // Reset project 1: Bug Tracker Application
-projectRouter.put('/reset/1', async (req, res) => {
+projectsRouter.put('/reset/1', async (req, res) => {
   const name = 'Bug Tracker Application';
   const desc = 'A full-stack Bug Tracker build, created with ReactJS, Express, and PostgreSQL.';
   const manager_id = '117085400102997502759';
@@ -242,7 +242,7 @@ projectRouter.put('/reset/1', async (req, res) => {
 })
 
 // Reset project 2: Chemistry Experiments
-projectRouter.put('/reset/2', async (req, res) => {
+projectsRouter.put('/reset/2', async (req, res) => {
   const name = 'Chemistry Experiments';
   const desc = 'A series of chemical trials, aimed at producing substances of high purity.';
   const manager_id = '10000';
@@ -268,4 +268,4 @@ projectRouter.put('/reset/2', async (req, res) => {
   res.status(200).send('Project 2 reset.');
 })
 
-module.exports = projectRouter;
+module.exports = projectsRouter;
