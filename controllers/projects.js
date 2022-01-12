@@ -259,7 +259,7 @@ projectsRouter.put('/reset/2', async (req, res) => {
   `
   
   pool.query(
-    'UPDATE projects SET name = $1, description = $2, manager_id = $3 WHERE project_id = 1',
+    'UPDATE projects SET name = $1, description = $2, manager_id = $3 WHERE project_id = 2',
     [name, desc, manager_id]
   );
   await pool.query('DELETE FROM user_projects WHERE project_id = 2');
