@@ -48,6 +48,7 @@ ticketsRouter.get('/user/:id', (req, res) => {
       WHERE
         user_id = $1
     )
+    ORDER BY ticket_id
   `
 
   pool.query(queryString, [id], (error, results) => {
