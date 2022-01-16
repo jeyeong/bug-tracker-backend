@@ -135,4 +135,21 @@ ticketsRouter.put('/change-title/:id', (req, res) => {
   )
 })
 
+// Change the description of a ticket
+ticketsRouter.put('/change-desc/:id', (req, res) => {
+  const id = req.params.id;
+  const { description } = req.body;
+
+  pool.query(
+    'UPDATE tickets SET description = $1 WHERE ticket_id = $2',
+    [description, id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Description of ticket with ID ${id} updated.`);
+    }
+  )
+})
+
 module.exports = ticketsRouter;
