@@ -244,7 +244,7 @@ projectsRouter.put('/reset/1', async (req, res) => {
 // Reset project 2: Chemistry Experiments
 projectsRouter.put('/reset/2', async (req, res) => {
   const name = 'Chemistry Experiments';
-  const desc = 'Experiments conducted with the goal of producing substances of the highest purity. These substances are intended to be sold across the United States.';
+  const desc = 'Experiments aimed at producing substances of the highest purity. These chemicals will be sold across America.';
   const manager_id = '10000';
   const teamConstructor = `
     INSERT INTO
