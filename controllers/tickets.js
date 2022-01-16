@@ -170,4 +170,20 @@ ticketsRouter.put('/change-status/:id', (req, res) => {
   )
 })
 
+// Delete a ticket
+ticketsRouter.delete('/:id', (req, res) => {
+  const id = req.params.id;
+
+  pool.query(
+    'DELETE FROM tickets WHERE ticket_id = $1',
+    [id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Deleted ticket ${id}.`);
+    }
+  )
+})
+
 module.exports = ticketsRouter;
