@@ -118,4 +118,21 @@ ticketsRouter.post('/', (req, res) => {
   );
 })
 
+// Change the title of a ticket
+ticketsRouter.put('/change-title/:id', (req, res) => {
+  const id = req.params.id;
+  const { title } = req.body;
+
+  pool.query(
+    'UPDATE tickets SET title = $1 WHERE ticket_id = $2',
+    [title, id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Title of ticket with ID ${id} updated.`);
+    }
+  )
+})
+
 module.exports = ticketsRouter;
