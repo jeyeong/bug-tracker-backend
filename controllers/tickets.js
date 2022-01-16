@@ -153,4 +153,21 @@ ticketsRouter.put('/change-desc/:id', (req, res) => {
   )
 })
 
+// Change the status of a ticket
+ticketsRouter.put('/change-status/:id', (req, res) => {
+  const id = req.params.id;
+  const { status } = req.body;
+
+  pool.query(
+    'UPDATE tickets SET status = $1 WHERE ticket_id = $2',
+    [status, id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(`Status of ticket with ID ${id} updated.`);
+    }
+  )
+})
+
 module.exports = ticketsRouter;
