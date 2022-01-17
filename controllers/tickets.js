@@ -94,6 +94,56 @@ ticketsRouter.get('/summary/:userid', (req, res) => {
   );
 })
 
+// Counts the number of tickets per week for the last five weeks
+ticketsRouter.get('/byweek/:userid', (req, res) => {
+  const id = req.params.userid;
+
+  const curDate = new Date();
+  const startDate = new Date(
+    curDate.getFullYear(),
+    curDate.getMonth(),
+    curDate.getDate() - curDate.getDay() - (5 * 7) + 1, // Monday, 5 weeks before
+  );
+  const startDateStr = `
+    ${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}
+  `;
+
+  const queryString = `
+    SELECT
+      EXTRACT(WEEK FROM created), COUNT(ticket_id)
+    FROM
+      tickets
+    WHERE
+      project_id
+    IN (
+      SELECT project_id FROM
+        projects
+      WHERE
+        project_id
+      IN (
+        SELECT project_id FROM
+          user_projects
+        WHERE user_id = $1
+      )
+    )
+    AND
+      created > $2
+    GROUP BY
+      EXTRACT(WEEK FROM created)
+  `
+
+  pool.query(
+    queryString,
+    [id, startDateStr],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+})
+
 // Create a new ticket
 ticketsRouter.post('/', (req, res) => {
   const {
