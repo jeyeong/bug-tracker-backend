@@ -110,7 +110,7 @@ ticketsRouter.get('/byweek/:userid', (req, res) => {
 
   const queryString = `
     SELECT
-      EXTRACT(WEEK FROM created), COUNT(ticket_id)
+      EXTRACT(WEEK FROM created) as week, COUNT(ticket_id)
     FROM
       tickets
     WHERE
